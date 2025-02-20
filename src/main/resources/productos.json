@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "nombre": "MacBook Air M3",
+    "precio": 1200.99
+  },
+  {
+    "id": 2,
+    "nombre": "Acer Aspire One",
+    "precio": 200.0
+  },
+  {
+    "id": 3,
+    "nombre": "Poco X6 Pro",
+    "precio": 256.95
+  }
+]
