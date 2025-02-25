@@ -47,7 +47,7 @@ public class ProductoService  implements IProductoService{
         //Crear el ID
         Long id = 1L;
         if (!productos.isEmpty()){ //si el array de productos no está vacío
-            id =(long) (productos.size() + 1); //hacemos que el id sea autoincremental
+            id =productos.get(productos.size() - 1).getId() + 1; //hacemos que el id sea autoincremental
         }
         p.setId(id);
         //Array de productos (añadir el producto)
@@ -59,7 +59,56 @@ public class ProductoService  implements IProductoService{
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
-
         return p;
+    }
+
+    @Override
+    public Producto actualizarProducto(Long id, Producto p) {
+        //Producto productoEncontrado = obtenerProductoPorId(id);
+        ArrayList<Producto> productos = obtenerTodosProductos();
+        Producto productoEncontrado = null;
+        for (Producto prod: productos){
+            if (prod.getId() == id){
+                // Actualizamos el array con el producto modificado
+                prod.setNombre(p.getNombre());
+                prod.setPrecio(p.getPrecio());
+                productoEncontrado = prod;
+                break;
+            }
+        }
+        if (productoEncontrado != null && productoEncontrado.getId() == id){
+            // Guardamos en el JSON
+            try {
+                File archivo = new File(getClass().getClassLoader().getResource(FILE_PATH).toURI());
+                objectMapper.writeValue(archivo,productos);
+            } catch (IOException | URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return productoEncontrado;
+    }
+
+    @Override
+    public Producto borrarProducto(Long id) {
+        ArrayList<Producto> productos = obtenerTodosProductos(); // 1º - volcamos JSON en un array
+        Producto productoBorrado = null;
+        for (Producto prod: productos){ //2º - encontrar ID en Array
+            if (prod.getId() == id){
+                //3º - borrar item del Array
+                productos.remove(prod);
+                productoBorrado = prod;
+                break;
+            }
+        }
+        if (productoBorrado != null && productoBorrado.getId() == id){
+            //4º - Guardamos en el JSON
+            try {
+                File archivo = new File(getClass().getClassLoader().getResource(FILE_PATH).toURI());
+                objectMapper.writeValue(archivo,productos);
+            } catch (IOException | URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return productoBorrado; //5º - return item borrado
     }
 }

@@ -8,4 +8,6 @@ public interface IProductoService {
     ArrayList<Producto> obtenerTodosProductos();
     Producto obtenerProductoPorId(Long id);
     Producto crearProducto(Producto p);
+    Producto actualizarProducto(Long id,Producto p);
+    Producto borrarProducto(Long id);
 }
